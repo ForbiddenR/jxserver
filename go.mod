@@ -1,4 +1,4 @@
-module github.com/ForbiddenR/apiserver
+module github.com/ForbiddenR/jxserver
 
 go 1.21.0
 

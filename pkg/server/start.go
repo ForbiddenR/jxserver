@@ -1,6 +1,6 @@
 package server
 
-import "github.com/ForbiddenR/apiserver/pkg/apiserver"
+import "github.com/ForbiddenR/jxserver/pkg/apiserver"
 
 type ServerOptions struct {
 }

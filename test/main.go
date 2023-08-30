@@ -1,8 +1,8 @@
 package main
 
-import "github.com/ForbiddenR/apiserver"
+import "github.com/ForbiddenR/jxserver"
 
 func main() {
-	server := apiserver.New()
+	server := jxserver.New()
 	server.Start(3000)
 }

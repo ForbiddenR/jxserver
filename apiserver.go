@@ -1,4 +1,4 @@
-package apiserver
+package jxserver
 
 import (
 	"fmt"
