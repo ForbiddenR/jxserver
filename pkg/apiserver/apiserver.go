@@ -1,13 +1,16 @@
 package apiserver
 
-type Config struct {
+import genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 
+type Config struct {
 }
 
 type Server struct {
+	GenericAPIServer *genericapiserver.GenericAPIServer
 }
 
 type completedConfig struct {
+	GenericConfig genericapiserver.CompletedConfig
 }
 
 type CompletedConfig struct {
@@ -20,5 +23,14 @@ func (cfg *Config) Complete() CompletedConfig {
 }
 
 func (c completedConfig) New() (*Server, error) {
-	return nil, nil
+	genericServer, err := c.GenericConfig.New()
+	if err != nil {
+		return nil, err
+	}
+
+	s := &Server{
+		GenericAPIServer: genericServer,
+	}
+
+	return s, nil
 }
