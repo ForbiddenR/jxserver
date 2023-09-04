@@ -1,8 +1,13 @@
 package server
 
-import "github.com/ForbiddenR/jxserver/pkg/apiserver"
+import (
+	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
+	genericoptions "github.com/ForbiddenR/apiserver/pkg/server/options"
+	"github.com/ForbiddenR/jxserver/pkg/apiserver"
+)
 
 type ServerOptions struct {
+	RecommendedOptions *genericoptions.RecommendedOptions
 }
 
 func NewServerOptions() *ServerOptions {
@@ -22,7 +27,17 @@ func (o ServerOptions) Complete() error {
 }
 
 func (o *ServerOptions) Config() (*apiserver.Config, error) {
-	return nil, nil
+	serverConfig := genericapiserver.NewRecommendedConfig()
+
+	if err := o.RecommendedOptions.ApplyTo(serverConfig); err != nil {
+		return nil, err
+	}
+
+	config := &apiserver.Config{
+		GenericConfig: serverConfig,
+	}
+	
+	return config, nil
 }
 
 func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
@@ -35,7 +50,6 @@ func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
 	if err != nil {
 		return err
 	}
-
 	if server == nil {
 		return nil
 	}

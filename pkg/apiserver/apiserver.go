@@ -3,6 +3,7 @@ package apiserver
 import genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 
 type Config struct {
+	GenericConfig *genericapiserver.RecommendedConfig
 }
 
 type Server struct {
@@ -23,7 +24,7 @@ func (cfg *Config) Complete() CompletedConfig {
 }
 
 func (c completedConfig) New() (*Server, error) {
-	genericServer, err := c.GenericConfig.New()
+	genericServer, err := c.GenericConfig.New("jx-apiserver")
 	if err != nil {
 		return nil, err
 	}
@@ -31,6 +32,8 @@ func (c completedConfig) New() (*Server, error) {
 	s := &Server{
 		GenericAPIServer: genericServer,
 	}
+
+
 
 	return s, nil
 }
