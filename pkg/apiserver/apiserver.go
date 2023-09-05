@@ -19,10 +19,13 @@ type CompletedConfig struct {
 }
 
 func (cfg *Config) Complete() CompletedConfig {
-	c := completedConfig{}
+	c := completedConfig{
+		cfg.GenericConfig.Complete(),
+	}
 	return CompletedConfig{&c}
 }
 
+// New returns a new instance of Server from the given config.
 func (c completedConfig) New() (*Server, error) {
 	genericServer, err := c.GenericConfig.New("jx-apiserver")
 	if err != nil {
@@ -32,8 +35,6 @@ func (c completedConfig) New() (*Server, error) {
 	s := &Server{
 		GenericAPIServer: genericServer,
 	}
-
-
 
 	return s, nil
 }

@@ -11,7 +11,26 @@ type ServerOptions struct {
 }
 
 func NewServerOptions() *ServerOptions {
-	return &ServerOptions{}
+	return &ServerOptions{
+		RecommendedOptions: genericoptions.NewRecommendedOptions(),
+	}
+}
+
+func NewStartServer(defaults *ServerOptions, stopCh <-chan struct{}) error {
+	o := *defaults
+
+	if err := o.Complete(); err != nil {
+		return err
+	}
+
+	if err := o.Validate(); err != nil {
+		return err
+	}
+
+	if err := o.RunServer(stopCh); err != nil {
+		return err
+	}
+	return nil
 }
 
 func StartServer(defaults *ServerOptions, stopCh <-chan struct{}) error {
@@ -50,6 +69,8 @@ func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
 	if err != nil {
 		return err
 	}
+
+	server.GenericAPIServer.PrepareRun()
 	if server == nil {
 		return nil
 	}

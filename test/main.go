@@ -1,8 +1,16 @@
 package main
 
-import "github.com/ForbiddenR/jxserver"
+import (
+	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
+	"github.com/ForbiddenR/jxserver/pkg/server"
+)
 
 func main() {
-	server := jxserver.New()
-	server.Start(3000)
+	stopCh := genericapiserver.SetupSignalHandler()
+	// stopCh := make(chan struct{})
+	options := server.NewServerOptions()
+	err := server.NewStartServer(options, stopCh)
+	if err != nil {
+		panic(err)
+	}
 }
