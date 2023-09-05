@@ -70,9 +70,5 @@ func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
 		return err
 	}
 
-	server.GenericAPIServer.PrepareRun()
-	if server == nil {
-		return nil
-	}
-	return nil
+	return server.GenericAPIServer.PrepareRun().Run(stopCh)
 }
