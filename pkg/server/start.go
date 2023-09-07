@@ -4,15 +4,21 @@ import (
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 	genericoptions "github.com/ForbiddenR/apiserver/pkg/server/options"
 	"github.com/ForbiddenR/jxserver/pkg/apiserver"
+	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
 )
 
 type ServerOptions struct {
 	RecommendedOptions *genericoptions.RecommendedOptions
+	ManageOptions      manage.Interface
 }
 
-func NewServerOptions() *ServerOptions {
+func NewServerOptions(ifs manage.Interface) *ServerOptions {
+	if ifs == nil {
+		ifs = &manage.NoopInterface{}
+	}
 	return &ServerOptions{
 		RecommendedOptions: genericoptions.NewRecommendedOptions(),
+		ManageOptions:      ifs,
 	}
 }
 
@@ -54,8 +60,9 @@ func (o *ServerOptions) Config() (*apiserver.Config, error) {
 
 	config := &apiserver.Config{
 		GenericConfig: serverConfig,
+		ManageInterface: o.ManageOptions,
 	}
-	
+
 	return config, nil
 }
 

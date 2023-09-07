@@ -8,7 +8,7 @@ import (
 func main() {
 	stopCh := genericapiserver.SetupSignalHandler()
 	// stopCh := make(chan struct{})
-	options := server.NewServerOptions()
+	options := server.NewServerOptions(nil)
 	err := server.NewStartServer(options, stopCh)
 	if err != nil {
 		panic(err)

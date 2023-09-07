@@ -10,6 +10,16 @@ type Interface interface {
 	GetConnections(mode uint8) (uint64, error)
 }
 
+type NoopInterface struct {}
+
+func (*NoopInterface) SwitchLogging(name string, instructment uint8) error {
+	return nil
+}
+
+func (*NoopInterface) GetConnections(mode uint8) (uint64, error) {
+	return 0, nil
+}
+
 var validate map[string]struct{} = map[string]struct{}{
 	"heartbeat": {},
 }
