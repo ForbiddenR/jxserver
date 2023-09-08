@@ -3,7 +3,7 @@ module github.com/ForbiddenR/jxserver
 go 1.21.0
 
 require (
-	github.com/ForbiddenR/apiserver v0.0.1
+	github.com/ForbiddenR/apiserver v0.0.2
 	github.com/gofiber/fiber/v2 v2.49.0
 	github.com/stretchr/testify v1.8.4
 	github.com/valyala/fasthttp v1.48.0
