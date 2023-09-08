@@ -9,6 +9,8 @@ import (
 
 func TestSwitchLogging(t *testing.T) {
 	jf := []byte(`{"feature": "heartbeat", "switch": 1}`)
-	err := json.Unmarshal(jf, &SetLoggingSwitchRequest{})
+	resp :=  &SetLoggingSwitchRequest{}
+	err := json.Unmarshal(jf, resp)
 	assert.Nil(t, err)
+	t.Log(resp)
 }

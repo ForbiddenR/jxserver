@@ -41,7 +41,7 @@ func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
 	if request.Switch > 1 {
 		return fmt.Errorf("invalid status of switch")
 	}
-	f = (*SetLoggingSwitchRequest)(request)
+	*f = (SetLoggingSwitchRequest)(*request)
 	return nil
 }
 
