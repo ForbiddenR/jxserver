@@ -49,6 +49,19 @@ type GetConnectionsRequest struct {
 	Type uint8 `json:"type"`
 }
 
+func (g *GetConnectionsRequest) UnmarshalJSON(data []byte) error {
+	type plain GetConnectionsRequest
+	request := &plain{}
+	if err := json.Unmarshal(data, request); err != nil {
+		return err
+	}
+	if request.Type != 1 {
+		return fmt.Errorf("invalid value of type")
+	}
+	*g = (GetConnectionsRequest)(*request)
+	return nil
+}
+
 type GetConnectionsResponse struct {
 	Response
 	Data *GetConnectionsResponseData `json:"data"`
