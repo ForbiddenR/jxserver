@@ -80,3 +80,4 @@ func (c completedConfig) New() (*Server, error) {
 
 	return s, nil
 }
+
