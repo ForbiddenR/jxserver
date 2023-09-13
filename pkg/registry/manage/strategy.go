@@ -10,7 +10,7 @@ type Interface interface {
 	GetConnections(mode uint8) (uint64, error)
 }
 
-type NoopInterface struct {}
+type NoopInterface struct{}
 
 func (*NoopInterface) SwitchLogging(name string, instructment uint8) error {
 	return nil
@@ -20,8 +20,41 @@ func (*NoopInterface) GetConnections(mode uint8) (uint64, error) {
 	return 0, nil
 }
 
-var validate map[string]struct{} = map[string]struct{}{
-	"heartbeat": {},
+var validate map[string]string = map[string]string{
+	"login":                         "Login",
+	"heartbeat":                     "Heartbeat",
+	"notifyevent":                   "NotifyEvent",
+	"notifyreport":                  "NotifyReport",
+	"transactionevent":              "TransactionEvent",
+	"metervalues":                   "MeterValues",
+	"bmsinfo":                       "BMSInfo",
+	"bmslimit":                      "BMSLimit",
+	"statusnotification":            "StatusNotification",
+	"logstatusnotification":         "LogStatusNotification",
+	"firmwarestatusnotification":    "FirmwareStatusNotification",
+	"reservationstatusnotification": "ReservationStatusNotification",
+	"getbasereport":                 "GetBaseReport",
+	"reset":                         "Reset",
+	"getlog":                        "GetLog",
+	"updatefirmware":                "UpdateFirmware",
+	"requeststarttransaction":       "RequestStartTransaction",
+	"requeststoptransaction":        "RequestStopTransaction",
+	"reservenow":                    "ReserveNow",
+	"cancelreservaion":              "CancelReservaion",
+	"setchargingprofile":            "SetChargingProfile",
+	"setpricescheme":                "SetPriceScheme",
+	"setintellectcharging":          "SetIntellectCharging",
+	"cancelintellectcharging":       "CancelIntellectCharging",
+	"clearcache":                    "ClearCache",
+	"setvariables":                  "SetVariables",
+	"getvariables":                  "GetVariables",
+	"getconnectorstatus":            "GetConnectorStatus",
+	"authorize":                     "Authorize",
+	"sendlocallist":                 "SendLocalList",
+	"qrcode":                        "QRCode",
+	"sendqrcode":                    "SendQRCode",
+	"clearchargingprofile":          "ClearChargingProfile",
+	"chargeencryinfonotification":   "ChargeEncryInfoNotification",
 }
 
 type SetLoggingSwitchRequest struct {
@@ -30,18 +63,33 @@ type SetLoggingSwitchRequest struct {
 }
 
 func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
-	type plain SetLoggingSwitchRequest
-	request := &plain{}
-	if err := json.Unmarshal(data, request); err != nil {
+	var plain map[string]interface{}
+	// type plain SetLoggingSwitchRequest
+	// request := &plain{}
+	if err := json.Unmarshal(data, &plain); err != nil {
 		return err
 	}
-	if _, ok := validate[request.Feature]; !ok {
-		return fmt.Errorf("invalid feature")
+	var feature string
+	var ok bool
+	var v interface{}
+	if v, ok = plain["feature"]; !ok {
+		return fmt.Errorf("feature is needed")
+	} else if feature, ok = v.(string); !ok {
+		return fmt.Errorf("invalid feature type")
 	}
-	if request.Switch > 1 {
-		return fmt.Errorf("invalid status of switch")
+	request := &SetLoggingSwitchRequest{}
+	if request.Feature, ok = validate[feature]; !ok {
+		return fmt.Errorf("invalid feature value")
 	}
-	*f = (SetLoggingSwitchRequest)(*request)
+
+	var swh float64
+	if v, ok = plain["switch"]; !ok {
+		return fmt.Errorf("switch is needed")
+	} else if swh, ok = v.(float64); !ok || int(swh) > 1 {
+		return fmt.Errorf("invalid switch")
+	}
+	request.Switch = uint8(swh)
+	*f = *request
 	return nil
 }
 
