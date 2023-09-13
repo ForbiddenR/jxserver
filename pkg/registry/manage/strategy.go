@@ -64,8 +64,6 @@ type SetLoggingSwitchRequest struct {
 
 func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
 	var plain map[string]interface{}
-	// type plain SetLoggingSwitchRequest
-	// request := &plain{}
 	if err := json.Unmarshal(data, &plain); err != nil {
 		return err
 	}
