@@ -5,21 +5,6 @@ import (
 	"fmt"
 )
 
-type Interface interface {
-	SwitchLogging(name string, instructment uint8) error
-	GetConnections(mode uint8) (uint64, error)
-}
-
-type NoopInterface struct{}
-
-func (*NoopInterface) SwitchLogging(name string, instructment uint8) error {
-	return nil
-}
-
-func (*NoopInterface) GetConnections(mode uint8) (uint64, error) {
-	return 0, nil
-}
-
 var validate map[string]string = map[string]string{
 	"login":                         "Login",
 	"heartbeat":                     "Heartbeat",
@@ -126,6 +111,39 @@ func NewGetConnectionsResponse(response *Response, data *GetConnectionsResponseD
 		},
 		Data: data,
 	}
+}
+
+type DisconnectConnectionRequest struct {
+	Sn string `json:"sn"`
+}
+
+type GetConnectionStatusRequest struct {
+	Sn string `json:"sn"`
+}
+
+type GetConnectionStatusResponse struct {
+	Response
+	Data *GetConnectionStatusResponseData `json:"data"`
+}
+
+type GetConnectionStatusResponseData struct {
+	LocalAddress  string `json:"localAddress"`
+	RemoteAddress string `json:"remoteAddress"`
+}
+
+type GetConnectionAlarmRulesResponse struct {
+	Response
+	Data *GetConnectionAlarmRulesResponseData `json:"data"`
+}
+
+type GetConnectionAlarmRulesResponseData struct {
+	Rule  string `json:"rule"`
+	Limit uint `json:"limit"`
+}
+
+type SetConnectionAlarmRulesRequest struct {
+	Rule  string `json:"rule"`
+	Limit uint `json:"limit"`
 }
 
 type responseStatus int

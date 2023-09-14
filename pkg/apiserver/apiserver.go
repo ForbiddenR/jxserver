@@ -77,7 +77,64 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count}))
 	})
-
+	v1.Post("disconnectConnection", func(c *fiber.Ctx) error {
+		request := &manage.DisconnectConnectionRequest{}
+		if err := c.BodyParser(request); err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		if err = s.Manage.CloseConnection(request.Sn); err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
+	})
+	v1.Post("getConnectionStatus", func(c *fiber.Ctx) error {
+		request := &manage.GetConnectionStatusRequest{}
+		if err := c.BodyParser(request); err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		var local, remote string
+		var err error
+		if local, remote, err = s.Manage.GetConnectionStatus(request.Sn); err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionStatusResponse{
+			Response: *manage.NewResponse(manage.Succeeded, "success"),
+			Data: &manage.GetConnectionStatusResponseData{
+				LocalAddress:  local,
+				RemoteAddress: remote,
+			},
+		})
+	})
+	v1.Post("getConnectionAlarmRules", func(c *fiber.Ctx) error {
+		rule, limit, err := s.Manage.GetConnectionAlarmRule()
+		if err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionAlarmRulesResponse{
+			Response: *manage.NewResponse(manage.Succeeded, "success"),
+			Data: &manage.GetConnectionAlarmRulesResponseData{
+				Rule:  rule,
+				Limit: limit,
+			},
+		})
+	})
+	v1.Post("setConnectionAlarmRules", func(c *fiber.Ctx) error {
+		request := &manage.SetConnectionAlarmRulesRequest{}
+		if err := c.BodyParser(request); err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		err := s.Manage.SetConnectionAlarmRules(request.Rule, request.Limit)
+		if err != nil {
+			log.Error(err)
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
+	})
 	return s, nil
 }
-
