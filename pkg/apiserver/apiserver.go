@@ -53,6 +53,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:logging:switch" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		request := &manage.SetLoggingSwitchRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -71,6 +77,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:get:connections" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		request := &manage.GetConnectionsRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -88,6 +100,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:disconnect" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		request := &manage.DisconnectConnectionRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -103,6 +121,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:status:get" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		request := &manage.GetConnectionStatusRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -126,6 +150,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:get" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		rule, limit, err := s.Manage.GetConnectionAlarmRule()
 		if err != nil {
 			log.Error(err)
@@ -143,6 +173,12 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:set" {
 			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
 		}
+		defer func(){
+			if err := recover(); err != nil {
+				log.Error(err)
+				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
+			}
+		}()
 		request := &manage.SetConnectionAlarmRulesRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)

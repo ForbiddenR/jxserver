@@ -69,11 +69,6 @@ func (o *ServerOptions) Config() (*apiserver.Config, error) {
 }
 
 func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
-	defer func() {
-		if e := recover(); e != nil {
-			fmt.Println(e)
-		}
-	}()
 	config, err := o.Config()
 	if err != nil {
 		return err
