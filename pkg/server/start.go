@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 	genericoptions "github.com/ForbiddenR/apiserver/pkg/server/options"
 	"github.com/ForbiddenR/jxserver/pkg/apiserver"
