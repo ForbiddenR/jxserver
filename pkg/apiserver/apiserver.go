@@ -19,8 +19,8 @@ type Server struct {
 }
 
 type completedConfig struct {
-	GenericConfig genericapiserver.CompletedConfig
-	ManageInterface  manage.Interface
+	GenericConfig   genericapiserver.CompletedConfig
+	ManageInterface manage.Interface
 }
 
 type CompletedConfig struct {
@@ -48,7 +48,11 @@ func (c completedConfig) New() (*Server, error) {
 	}
 
 	v1 := s.GenericAPIServer.Handler.GoRestfulApp.Group("/manage")
+
 	v1.Post("/setLoggingSwitch", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:logging:switch" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		request := &manage.SetLoggingSwitchRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -64,6 +68,9 @@ func (c completedConfig) New() (*Server, error) {
 	})
 
 	v1.Post("/getConnections", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:get:connections" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		request := &manage.GetConnectionsRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -78,6 +85,9 @@ func (c completedConfig) New() (*Server, error) {
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count}))
 	})
 	v1.Post("disconnectConnection", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:disconnect" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		request := &manage.DisconnectConnectionRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -90,6 +100,9 @@ func (c completedConfig) New() (*Server, error) {
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
 	})
 	v1.Post("getConnectionStatus", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:status:get" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		request := &manage.GetConnectionStatusRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
@@ -110,6 +123,9 @@ func (c completedConfig) New() (*Server, error) {
 		})
 	})
 	v1.Post("getConnectionAlarmRules", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:get" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		rule, limit, err := s.Manage.GetConnectionAlarmRule()
 		if err != nil {
 			log.Error(err)
@@ -124,6 +140,9 @@ func (c completedConfig) New() (*Server, error) {
 		})
 	})
 	v1.Post("setConnectionAlarmRules", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:set" {
+			return c.Status(fasthttp.StatusForbidden).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+		}
 		request := &manage.SetConnectionAlarmRulesRequest{}
 		if err := c.BodyParser(request); err != nil {
 			log.Error(err)
