@@ -1,6 +1,8 @@
 package server
 
 import (
+	"fmt"
+
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 	genericoptions "github.com/ForbiddenR/apiserver/pkg/server/options"
 	"github.com/ForbiddenR/jxserver/pkg/apiserver"
@@ -67,6 +69,11 @@ func (o *ServerOptions) Config() (*apiserver.Config, error) {
 }
 
 func (o ServerOptions) RunServer(stopCh <-chan struct{}) error {
+	defer func() {
+		if e := recover(); e != nil {
+			fmt.Println(e)
+		}
+	}()
 	config, err := o.Config()
 	if err != nil {
 		return err
