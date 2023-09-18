@@ -3,6 +3,7 @@ package manage
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 var validate map[string]string = map[string]string{
@@ -61,7 +62,7 @@ func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
 		return fmt.Errorf("invalid feature type")
 	}
 	request := &SetLoggingSwitchRequest{}
-	if request.Feature, ok = validate[feature]; !ok {
+	if request.Feature, ok = validate[strings.ToLower(feature)]; !ok {
 		return fmt.Errorf("invalid feature value")
 	}
 
