@@ -69,7 +69,7 @@ func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
 	var swh float64
 	if v, ok = plain["switch"]; !ok {
 		return fmt.Errorf("switch is needed")
-	} else if swh, ok = v.(float64); !ok || swh > 1 {
+	} else if swh, ok = v.(float64); !ok || swh > 1 || swh < 0 {
 		return fmt.Errorf("invalid switch")
 	}
 	fmt.Println("swh is", swh)
