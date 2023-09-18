@@ -106,8 +106,8 @@ type GetConnectionsResponseData struct {
 func NewGetConnectionsResponse(response *Response, data *GetConnectionsResponseData) *GetConnectionsResponse {
 	return &GetConnectionsResponse{
 		Response: Response{
-			Status:  Succeeded,
-			Message: "success",
+			Status:  response.Status,
+			Message: response.Message,
 		},
 		Data: data,
 	}

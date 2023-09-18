@@ -27,7 +27,6 @@ func (s *apiServer) Start(port int) {
 	s.server.Listener(ln)
 }
 
-
 func (s *apiServer) Stop() {
 	s.server.Shutdown()
 }
