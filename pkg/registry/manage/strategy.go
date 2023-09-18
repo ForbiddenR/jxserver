@@ -138,12 +138,28 @@ type GetConnectionAlarmRulesResponse struct {
 
 type GetConnectionAlarmRulesResponseData struct {
 	Rule  string `json:"rule"`
-	Limit uint `json:"limit"`
+	Limit uint   `json:"limit"`
 }
 
 type SetConnectionAlarmRulesRequest struct {
 	Rule  string `json:"rule"`
-	Limit uint `json:"limit"`
+	Limit uint   `json:"limit"`
+}
+
+func (s *SetConnectionAlarmRulesRequest) UnmarshalJSON(data []byte) error {
+	type plain SetConnectionAlarmRulesRequest
+	request := &plain{}
+	if err := json.Unmarshal(data, request); err != nil {
+		return err
+	}
+	if request.Limit == 0 {
+		return fmt.Errorf("invalid value of limit")
+	}
+	if request.Rule != "gte" && request.Rule != "gt" && request.Rule != "lte" && request.Rule != "e" && request.Rule != "lt" {
+		return fmt.Errorf("invalid value of rule")
+	}
+	*s = (SetConnectionAlarmRulesRequest)(*request)
+	return nil
 }
 
 type responseStatus int
