@@ -131,35 +131,35 @@ func (c completedConfig) New() (*Server, error) {
 			},
 		})
 	})
-	v1.Post("getConnectionAlarmRules", func(c *fiber.Ctx) error {
-		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:get" {
-			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "permission denied"))
-		}
-		rule, limit, err := s.Manage.GetConnectionAlarmRule()
-		if err != nil {
-			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
-		}
-		return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionAlarmRulesResponse{
-			Response: *manage.NewResponse(manage.Succeeded, "success"),
-			Data: &manage.GetConnectionAlarmRulesResponseData{
-				Rule:  rule,
-				Limit: limit,
-			},
-		})
-	})
-	v1.Post("setConnectionAlarmRules", func(c *fiber.Ctx) error {
-		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:set" {
-			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "permission denied"))
-		}
-		request := &manage.SetConnectionAlarmRulesRequest{}
-		if err := c.BodyParser(request); err != nil {
-			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
-		}
-		err := s.Manage.SetConnectionAlarmRules(request.Rule, request.Limit)
-		if err != nil {
-			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
-		}
-		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
-	})
+	// v1.Post("getConnectionAlarmRules", func(c *fiber.Ctx) error {
+	// 	if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:get" {
+	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+	// 	}
+	// 	rule, limit, err := s.Manage.GetConnectionAlarmRule()
+	// 	if err != nil {
+	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+	// 	}
+	// 	return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionAlarmRulesResponse{
+	// 		Response: *manage.NewResponse(manage.Succeeded, "success"),
+	// 		Data: &manage.GetConnectionAlarmRulesResponseData{
+	// 			Rule:  rule,
+	// 			Limit: limit,
+	// 		},
+	// 	})
+	// })
+	// v1.Post("setConnectionAlarmRules", func(c *fiber.Ctx) error {
+	// 	if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:set" {
+	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "permission denied"))
+	// 	}
+	// 	request := &manage.SetConnectionAlarmRulesRequest{}
+	// 	if err := c.BodyParser(request); err != nil {
+	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+	// 	}
+	// 	err := s.Manage.SetConnectionAlarmRules(request.Rule, request.Limit)
+	// 	if err != nil {
+	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+	// 	}
+	// 	return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
+	// })
 	return s, nil
 }
