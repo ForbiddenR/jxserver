@@ -133,10 +133,10 @@ type GetConnectionStatusResponse struct {
 }
 
 type GetConnectionStatusResponseData struct {
-	HandlerCreateTime int64 `json:"handlerCreateTime"`
-	LastHearbeatTime int64 `json:"lastHearbeatTime"`
-	LocalAddress  string `json:"localAddress"`
-	RemoteAddress string `json:"remoteAddress"`
+	HandlerCreateTime string `json:"handlerCreateTime"`
+	LastHearbeatTime  string `json:"lastHearbeatTime"`
+	LocalAddress      string `json:"localAddress"`
+	RemoteAddress     string `json:"remoteAddress"`
 }
 
 type GetConnectionAlarmRulesResponse struct {
