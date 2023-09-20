@@ -72,7 +72,6 @@ func (f *SetLoggingSwitchRequest) UnmarshalJSON(data []byte) error {
 	} else if swh, ok = v.(float64); !ok || swh > 1 || swh < 0 {
 		return fmt.Errorf("invalid switch")
 	}
-	fmt.Println("swh is", swh)
 	request.Switch = uint8(swh)
 	*f = *request
 	return nil
@@ -83,13 +82,18 @@ type GetConnectionsRequest struct {
 }
 
 func (g *GetConnectionsRequest) UnmarshalJSON(data []byte) error {
-	type plain GetConnectionsRequest
-	request := &plain{}
-	if err := json.Unmarshal(data, request); err != nil {
+	// type plain GetConnectionsRequest
+	var check map[string]interface{}
+	if err := json.Unmarshal(data, &check); err != nil {
 		return err
 	}
-	if request.Type != 1 {
+	request := &GetConnectionsRequest{}
+	if v, ok := check["type"]; !ok {
 		return fmt.Errorf("invalid value of type")
+	} else if ty, ok := v.(float64); !ok || ty != 1 {
+		return fmt.Errorf("invalid value of type")
+	} else {
+		request.Type = uint8(ty)
 	}
 	*g = (GetConnectionsRequest)(*request)
 	return nil
@@ -129,6 +133,8 @@ type GetConnectionStatusResponse struct {
 }
 
 type GetConnectionStatusResponseData struct {
+	HandlerCreateTime int64 `json:"handlerCreateTime"`
+	LastHearbeatTime int64 `json:"lastHearbeatTime"`
 	LocalAddress  string `json:"localAddress"`
 	RemoteAddress string `json:"remoteAddress"`
 }

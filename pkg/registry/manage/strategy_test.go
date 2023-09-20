@@ -16,7 +16,7 @@ func TestSwitchLogging(t *testing.T) {
 }
 
 func TestGetConnections(t *testing.T) {
-	jf := []byte(`{"type": 0}`)
+	jf := []byte(`{"Type": 1}`)
 	resp := &GetConnectionsRequest{}
 	err := json.Unmarshal(jf, resp)
 	assert.Nil(t, err)

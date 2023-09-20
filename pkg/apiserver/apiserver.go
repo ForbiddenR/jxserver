@@ -4,7 +4,6 @@ import (
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/log"
 	"github.com/valyala/fasthttp"
 )
 
@@ -55,19 +54,17 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		request := &manage.SetLoggingSwitchRequest{}
 		if err := c.BodyParser(request); err != nil {
-			log.Error(err)
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 
 		err = s.Manage.SwitchLogging(request.Feature, request.Switch)
 		if err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
@@ -79,19 +76,19 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
+				
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		request := &manage.GetConnectionsRequest{}
 		if err := c.BodyParser(request); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Failed, err.Error()), nil))
 		}
 		var count uint64
 		var err error
 		if count, err = s.Manage.GetConnections(request.Type); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Failed, err.Error()), nil))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count}))
@@ -102,17 +99,17 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
+				
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		request := &manage.DisconnectConnectionRequest{}
 		if err := c.BodyParser(request); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		if err = s.Manage.CloseConnection(request.Sn); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
@@ -123,19 +120,19 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
+				
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		request := &manage.GetConnectionStatusRequest{}
 		if err := c.BodyParser(request); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		var local, remote string
 		var err error
 		if local, remote, err = s.Manage.GetConnectionStatus(request.Sn); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionStatusResponse{
@@ -152,13 +149,13 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
+				
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		rule, limit, err := s.Manage.GetConnectionAlarmRule()
 		if err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(&manage.GetConnectionAlarmRulesResponse{
@@ -175,18 +172,18 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		defer func(){
 			if err := recover(); err != nil {
-				log.Error(err)
+				
 				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
 			}
 		}()
 		request := &manage.SetConnectionAlarmRulesRequest{}
 		if err := c.BodyParser(request); err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		err := s.Manage.SetConnectionAlarmRules(request.Rule, request.Limit)
 		if err != nil {
-			log.Error(err)
+			
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
