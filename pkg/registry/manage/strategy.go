@@ -133,7 +133,7 @@ type GetConnectionStatusResponse struct {
 }
 
 type GetConnectionStatusResponseData struct {
-	HandlerCreateTime string `json:"handlerCreateTime"`
+	HandlerCreateTime string `json:"handleCreateTime"`
 	LastHearbeatTime  string `json:"lastHearbeatTime"`
 	LocalAddress      string `json:"localAddress"`
 	RemoteAddress     string `json:"remoteAddress"`
