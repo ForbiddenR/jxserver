@@ -79,11 +79,12 @@ func (c completedConfig) New() (*Server, error) {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Failed, err.Error()), nil))
 		}
 		var count uint64
+		var host string
 		var err error
-		if count, err = s.Manage.GetConnections(request.Type); err != nil {
+		if count, host, err = s.Manage.GetConnections(request.Type); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Failed, err.Error()), nil))
 		}
-		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count}))
+		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count, Host: host}))
 	})
 	v1.Post("disconnectConnection", func(c *fiber.Ctx) error {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:disconnect" {

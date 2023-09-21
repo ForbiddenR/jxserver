@@ -2,7 +2,7 @@ package manage
 
 type Interface interface {
 	SwitchLogging(name string, instructment uint8) error
-	GetConnections(mode uint8) (uint64, error)
+	GetConnections(mode uint8) (uint64, string, error)
 	CloseConnection(sn string) error
 	GetConnectionStatus(sn string) (ct string, lht string, local string, remote string, err error)
 	GetConnectionAlarmRule() (rule string, limit uint, err error)
@@ -15,8 +15,8 @@ func (*NoopInterface) SwitchLogging(name string, instructment uint8) error {
 	return nil
 }
 
-func (*NoopInterface) GetConnections(mode uint8) (uint64, error) {
-	return 0, nil
+func (*NoopInterface) GetConnections(mode uint8) (uint64, string, error) {
+	return 0, "", nil
 }
 
 func (*NoopInterface) CloseConnection(sn string) error {

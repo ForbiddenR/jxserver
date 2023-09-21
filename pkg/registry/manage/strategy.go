@@ -106,6 +106,7 @@ type GetConnectionsResponse struct {
 
 type GetConnectionsResponseData struct {
 	Count  uint64   `json:"count"`
+	Host   string   `json:"host"`
 	Handle []string `json:"handle"`
 }
 
