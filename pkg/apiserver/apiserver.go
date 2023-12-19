@@ -52,6 +52,15 @@ func (c completedConfig) New() (*Server, error) {
 		if c.Get("Content-Type", "") != "application/json" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Invalid Content-Type"))
 		}
+		defer func() {
+			if des := recover(); err != nil {
+				if err, ok := des.(error); ok {
+					c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+				} else {
+					c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "unknown error"))
+				}
+			}
+		}()
 		return c.Next()
 	})
 
@@ -59,11 +68,6 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:logging:switch" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
-		defer func() {
-			if err := recover(); err != nil {
-				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
-			}
-		}()
 		request := &manage.SetLoggingSwitchRequest{}
 		if err := c.BodyParser(request); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
@@ -97,11 +101,6 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:disconnect" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
-		defer func() {
-			if err := recover(); err != nil {
-				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
-			}
-		}()
 		request := &manage.DisconnectConnectionRequest{}
 		if err := c.BodyParser(request); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
@@ -115,11 +114,6 @@ func (c completedConfig) New() (*Server, error) {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:status:get" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
-		defer func() {
-			if err := recover(); err != nil {
-				c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.(error).Error()))
-			}
-		}()
 		request := &manage.GetConnectionStatusRequest{}
 		if err := c.BodyParser(request); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
