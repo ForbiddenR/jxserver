@@ -97,7 +97,7 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewGetConnectionsResponse(manage.NewResponse(manage.Succeeded, "success"), &manage.GetConnectionsResponseData{Count: count, Host: host}))
 	})
-	v1.Post("disconnectConnection", func(c *fiber.Ctx) error {
+	v1.Post("/disconnectConnection", func(c *fiber.Ctx) error {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:disconnect" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
@@ -110,7 +110,7 @@ func (c completedConfig) New() (*Server, error) {
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
 	})
-	v1.Post("getConnectionStatus", func(c *fiber.Ctx) error {
+	v1.Post("/getConnectionStatus", func(c *fiber.Ctx) error {
 		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:status:get" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
@@ -133,6 +133,9 @@ func (c completedConfig) New() (*Server, error) {
 			},
 		})
 	})
+	// v1.Post("/metrics", func(c *fiber.Ctx) error {
+		
+	// })
 	// v1.Post("getConnectionAlarmRules", func(c *fiber.Ctx) error {
 	// 	if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:connection:rules:get" {
 	// 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
