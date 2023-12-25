@@ -5,6 +5,7 @@ import (
 	genericoptions "github.com/ForbiddenR/apiserver/pkg/server/options"
 	"github.com/ForbiddenR/jxserver/pkg/apiserver"
 	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type ServerOptions struct {
@@ -20,6 +21,10 @@ func NewServerOptions(ifs manage.Interface) *ServerOptions {
 		RecommendedOptions: genericoptions.NewRecommendedOptions(),
 		ManageOptions:      ifs,
 	}
+}
+
+func Register(collectors ...prometheus.Collector) {
+	prometheus.MustRegister(collectors...)
 }
 
 func NewStartServer(defaults *ServerOptions, stopCh <-chan struct{}) error {
