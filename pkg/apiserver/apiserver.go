@@ -5,6 +5,7 @@ import (
 	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/valyala/fasthttp"
 )
@@ -46,7 +47,10 @@ func (c completedConfig) New() (*Server, error) {
 		GenericAPIServer: genericServer,
 		Manage:           c.ManageInterface,
 	}
-	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
+
+	promHandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{})
+
+	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promHandler))
 	v1 := s.GenericAPIServer.Handler.GoRestfulApp.Group("/manage")
 
 	v1.Use(func(c *fiber.Ctx) error {
