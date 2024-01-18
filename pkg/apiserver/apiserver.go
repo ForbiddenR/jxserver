@@ -48,7 +48,10 @@ func (c completedConfig) New() (*Server, error) {
 		Manage:           c.ManageInterface,
 	}
 
-	promHandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{})
+	promHandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{
+		DisableCompression: true,
+		EnableOpenMetrics: false,
+	})
 
 	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promHandler))
 	v1 := s.GenericAPIServer.Handler.GoRestfulApp.Group("/manage")
