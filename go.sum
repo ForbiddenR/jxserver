@@ -1,7 +1,7 @@
 github.com/ForbiddenR/apiserver v0.1.1 h1:E1aYCquZZY+M0ZgRUrVepi3nw39FrXahpaTLzg81OYw=
 github.com/ForbiddenR/apiserver v0.1.1/go.mod h1:NHOGyFtn6vs8YNJLY+BgGsqliGmPQTZezG3+cLerKAY=
-github.com/ForbiddenR/client_golang v0.0.2 h1:dXxs/q4NAIxE4lnBBkhBbaJDeEtBXgtRVu1+Ee9R8Gk=
-github.com/ForbiddenR/client_golang v0.0.2/go.mod h1:Gwcn7aIueEdn+oJ12q1mX2zAlfaNm6R1TyqPgGUbJ3M=
+github.com/ForbiddenR/client_golang v0.0.7 h1:JkELhvoUI6beCQCzhiVvx/TVd9pX2ktX52Lx8cbPaig=
+github.com/ForbiddenR/client_golang v0.0.7/go.mod h1:SZTmyf881gFAes6208Ce7p+hCh9qJkSV5OU7MVQmeUc=
 github.com/andybalholm/brotli v1.0.5 h1:8uQZIdzKmjc/iuPu7O2ioW48L81FgatrcpfFmiq/cCs=
 github.com/andybalholm/brotli v1.0.5/go.mod h1:fO7iG3H7G2nSZ7m0zPUDn85XEX2GTukHGRSepvi9Eig=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=

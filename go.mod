@@ -2,7 +2,7 @@ module github.com/ForbiddenR/jxserver
 
 go 1.21.0
 
-replace github.com/prometheus/client_golang => github.com/ForbiddenR/client_golang v0.0.3
+replace github.com/prometheus/client_golang => github.com/ForbiddenR/client_golang v0.0.7
 
 require (
 	github.com/ForbiddenR/apiserver v0.1.1
