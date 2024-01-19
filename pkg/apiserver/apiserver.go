@@ -2,7 +2,6 @@ package apiserver
 
 import (
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
-	"github.com/prometheus/client_golang/prometheus"
 	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
@@ -48,12 +47,7 @@ func (c completedConfig) New() (*Server, error) {
 		Manage:           c.ManageInterface,
 	}
 
-	promHandler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{
-		DisableCompression: true,
-		EnableOpenMetrics: false,
-	})
-
-	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promHandler))
+	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 	v1 := s.GenericAPIServer.Handler.GoRestfulApp.Group("/manage")
 
 	v1.Use(func(c *fiber.Ctx) error {

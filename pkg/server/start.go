@@ -24,9 +24,6 @@ func NewServerOptions(ifs manage.Interface) *ServerOptions {
 }
 
 func Register(collectors ...prometheus.Collector) {
-	defaultRegistry := prometheus.NewRegistry()
-	prometheus.DefaultRegisterer = defaultRegistry
-	prometheus.DefaultGatherer = defaultRegistry
 	prometheus.MustRegister(collectors...)
 }
 
