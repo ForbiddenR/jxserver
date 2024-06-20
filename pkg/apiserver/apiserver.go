@@ -139,7 +139,7 @@ func (c completedConfig) New() (*Server, error) {
 	})
 
 	v1.Post("/updateLogLevel", func(c *fiber.Ctx) error {
-		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "update:log:level" {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "manage:update:log:level" {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
 		}
 		request := &manage.UpdateLogLevelRequest{}
