@@ -3,6 +3,7 @@ package apiserver
 import (
 	genericapiserver "github.com/ForbiddenR/apiserver/pkg/server"
 	"github.com/ForbiddenR/jxserver/pkg/registry/manage"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/adaptor"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -47,6 +48,7 @@ func (c completedConfig) New() (*Server, error) {
 		Manage:           c.ManageInterface,
 	}
 
+	validate := validator.New()
 	s.GenericAPIServer.Handler.GoRestfulApp.Get("/metrics", adaptor.HTTPHandler(promhttp.Handler()))
 	v1 := s.GenericAPIServer.Handler.GoRestfulApp.Group("/manage")
 
@@ -134,6 +136,23 @@ func (c completedConfig) New() (*Server, error) {
 				RemoteAddress:     remote,
 			},
 		})
+	})
+
+	v1.Post("/updateLogLevel", func(c *fiber.Ctx) error {
+		if perm, ok := c.GetReqHeaders()["Perms"]; !ok || perm != "update:log:level" {
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, "Permission denied"))
+		}
+		request := &manage.UpdateLogLevelRequest{}
+		if err := c.BodyParser(request); err != nil {
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		if err := validate.Struct(request); err != nil {
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		if err := s.Manage.UpdateLoggerLevel(request.Location, request.Level); err != nil {
+			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
+		}
+		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
 	})
 	// v1.Post("/metrics", func(c *fiber.Ctx) error {
 	// })

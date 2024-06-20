@@ -7,6 +7,7 @@ type Interface interface {
 	GetConnectionStatus(sn string) (ct string, lht string, local string, remote string, err error)
 	GetConnectionAlarmRule() (rule string, limit uint, err error)
 	SetConnectionAlarmRules(rule string, limit uint) error
+	UpdateLoggerLevel(location, level string) error
 }
 
 type NoopInterface struct{}
@@ -32,5 +33,9 @@ func (*NoopInterface) GetConnectionAlarmRule() (rule string, limit uint, err err
 }
 
 func (*NoopInterface) SetConnectionAlarmRules(rule string, limit uint) error {
+	return nil
+}
+
+func (*NoopInterface) UpdateLoggerLevel(location, level string) error {
 	return nil
 }

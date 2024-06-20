@@ -189,3 +189,8 @@ func NewResponse(status responseStatus, msg string) *Response {
 		Message: msg,
 	}
 }
+
+type UpdateLogLevelRequest struct {
+	Level    string `json:"level" validate:"oneof=NONE WARN DEBUG INFO"`
+	Location string `json:"location" validate:"oneof=aliyun stdout"`
+}
