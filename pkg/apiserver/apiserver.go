@@ -149,7 +149,7 @@ func (c completedConfig) New() (*Server, error) {
 		if err := validate.Struct(request); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
-		if err := s.Manage.UpdateLoggerLevel(request.Location, request.Level); err != nil {
+		if err := s.Manage.UpdateLogLevel(request.Location, request.Level); err != nil {
 			return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Failed, err.Error()))
 		}
 		return c.Status(fasthttp.StatusOK).JSON(manage.NewResponse(manage.Succeeded, "success"))
