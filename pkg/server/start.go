@@ -64,7 +64,7 @@ func (o *ServerOptions) Config() (*apiserver.Config, error) {
 	}
 
 	config := &apiserver.Config{
-		GenericConfig: serverConfig,
+		GenericConfig:   serverConfig,
 		ManageInterface: o.ManageOptions,
 	}
 

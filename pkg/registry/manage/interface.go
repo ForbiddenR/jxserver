@@ -1,6 +1,7 @@
 package manage
 
 type Interface interface {
+	BeforeGetMetrics()
 	SwitchLogging(name string, instructment uint8) error
 	GetConnections(mode uint8) (uint64, string, error)
 	CloseConnection(sn string) error
@@ -11,6 +12,8 @@ type Interface interface {
 }
 
 type NoopInterface struct{}
+
+func (*NoopInterface) BeforeGetMetrics() {}
 
 func (*NoopInterface) SwitchLogging(name string, instructment uint8) error {
 	return nil

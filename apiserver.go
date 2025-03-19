@@ -20,7 +20,7 @@ func New() *apiServer {
 }
 
 func (s *apiServer) Start(port int) {
-	ln , err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	ln, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		panic(err)
 	}
